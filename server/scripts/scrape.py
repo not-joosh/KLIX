@@ -1,8 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, jsonify
-app = Flask(__name__)
-
 class SP500_Scraper:
     def __init__(self):
         self.SP500_list = []
@@ -72,18 +69,3 @@ class SP500_Scraper:
             "Page image": page_image,
             "Page views in the past 30 days": int(page_views.replace(',', ''))
         }
-
-@app.route("/")
-def scrape_wikipedia():
-    scraper = SP500_Scraper()
-    scraper.scrape()
-    return jsonify(scraper.SP500_list)
-
-@app.route("/stats/<company_name>")
-def get_company_stats(company_name):
-    scraper = SP500_Scraper()
-    stats = scraper.get_wiki_stats(company_name)
-    return jsonify(stats)
-
-if __name__ == "__main__":
-    app.run()

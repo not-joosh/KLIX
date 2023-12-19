@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/*==========    DEPENDENCIES    ==========*/
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './index.css'
 
-function App() {
-  const [count, setCount] = useState(0)
 
+/*==========    ROUTES    ==========*/
+import { LANDINGPAGE, HOME, PAGE_NOT_FOUND } from './store/routes';
+
+/*==========    COMPONENTS    ==========*/
+import { Navbar } from './components/Navbar'; 
+
+/*==========    VIEWS    ==========*/
+import { LandingPage } from './views/LandingPage';
+import { HomePage } from './views/HomePage';
+import { ErrorPage } from './views/ErrorPage';
+
+
+const wrapNav = ({ componentIn }: { componentIn: React.ReactElement }) => {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* <Navbar /> */}
+      {componentIn}
     </>
-  )
-}
+  );
+};
 
-export default App
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path={LANDINGPAGE} element={<LandingPage />} />
+        <Route path={HOME} element={wrapNav({ componentIn: <HomePage /> })} />
+        <Route path={PAGE_NOT_FOUND} element={<ErrorPage />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
