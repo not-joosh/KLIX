@@ -1,7 +1,7 @@
 /*-------   DEPENDENCIES    -------*/
 import { initializeApp } from "firebase/app";
 import { getAuth, GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { collection, getFirestore } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -25,3 +25,4 @@ export const githubProvider = new GithubAuthProvider();
 export const googleProvider = new GoogleAuthProvider();
 
 /*---   FIREBASE COLLECTIONS    ---*/
+export const usersRef = collection(db, 'users');

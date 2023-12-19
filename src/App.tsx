@@ -13,6 +13,7 @@ import { Navbar } from './components/Navbar';
 import { LandingPage } from './views/LandingPage';
 import { HomePage } from './views/HomePage';
 import { ErrorPage } from './views/ErrorPage';
+import { DebuggingPage } from './views/DebuggingPage';
 
 
 const wrapNav = ({ componentIn }: { componentIn: React.ReactElement }) => {
@@ -26,13 +27,14 @@ const wrapNav = ({ componentIn }: { componentIn: React.ReactElement }) => {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path={LANDINGPAGE} element={<LandingPage />} />
-        <Route path={HOME} element={wrapNav({ componentIn: <HomePage /> })} />
-        <Route path={PAGE_NOT_FOUND} element={<ErrorPage />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path = "Testing" element = {<DebuggingPage />} />
+          <Route path={LANDINGPAGE} element={<LandingPage />} />
+          <Route path={HOME} element={wrapNav({ componentIn: <HomePage /> })} />
+          <Route path={PAGE_NOT_FOUND} element={<ErrorPage />} />
+        </Routes>
+      </Router>
   );
 };
 
