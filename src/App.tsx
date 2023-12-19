@@ -18,7 +18,7 @@ import { ErrorPage } from './views/ErrorPage';
 const wrapNav = ({ componentIn }: { componentIn: React.ReactElement }) => {
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       {componentIn}
     </>
   );

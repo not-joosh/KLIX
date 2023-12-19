@@ -54,7 +54,24 @@
 ### Documented Inquire
 `Kai J — 06/21/2022 12:10 PM`
 ```bat
-essentially most public traded companies have wiki pages and you can view page visits for each of those wikipedia pages. so essentially this is where the coding comes in, you will compile a list of all the wiki pages of the companies that are in the sp500 which is 500 companies, then you will make a code (this is the part where you will make the code and tell it what to do because i have no idea what type of code you will need) you will need to create a bot that can catergorize all the page visits of those 500 companies and quantify the data, so that it would show me differences for example we can set a base average visits and then whenever a certain company gets above a certain amount of visits (above average) it will notify you and me, and from intial findings most companies that have received higher than average page visits in the past year have gone mostly up. let me know if this is something you can do, this is great oppurtunity not only for me when I apply to Investment banking jobs, but also you if you didnt want to work in the software/tech industry you can take this and go to Quant hedge funds. I think either way even if we don't invest in the companies ourselves it would look great in both our portfolios.(there might even be room to make excel coded sheets on my end in case you can't get the bot to look user friendly. And don't think it would just be you working on it.  I would help the most that I can possibly can, for example in the code their might be certain outliers that are finance or economical related and I can take a look and decide if those outliers provide any meaningful data. please let me know if you can do this, I know you are busy with school, but I do know if you want to land a sofrware engineer job you have to have a website with all your projects
+essentially most public traded companies have wiki pages and you can view page visits 
+for each of those wikipedia pages. so essentially this is where the coding comes in, 
+you will compile a list of all the wiki pages of the companies that are in the sp500 which is 500 companies, 
+then you will make a code (this is the part where you will make the code and tell it what to do because 
+i have no idea what type of code you will need) you will need to create a bot that can catergorize all the page 
+visits of those 500 companies and quantify the data, so that it would show me differences for example we can 
+set a base average visits and then whenever a certain company gets above a certain amount of visits (above average) 
+it will notify you and me, and from intial findings most companies that have received higher than average page 
+visits in the past year have gone mostly up. let me know if this is something you can do, this is great 
+oppurtunity not only for me when I apply to Investment banking jobs, but also you if you didnt want to work 
+in the software/tech industry you can take this and go to Quant hedge funds. I think either way even if 
+we don't invest in the companies ourselves it would look great in both our portfolios.
+(there might even be room to make excel coded sheets on my end in case you can't get the bot to look user 
+friendly. And don't think it would just be you working on it.  I would help the most that I can possibly can, 
+for example in the code their might be certain outliers that are finance or economical related and I can take 
+a look and decide if those outliers provide any meaningful data. please let me know if you can do this, 
+I know you are busy with school, but I do know if you want to land a sofrware engineer job you have 
+to have a website with all your projects
 ```
 
 ### Progress
