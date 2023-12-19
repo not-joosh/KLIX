@@ -1,4 +1,4 @@
-# Clickonomics
+# KLIX
 
 ## Functional Requirements:
 - Data Gathering:

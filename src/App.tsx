@@ -1,5 +1,6 @@
 /*==========    DEPENDENCIES    ==========*/
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 import './index.css'
 
 
@@ -27,6 +28,7 @@ const wrapNav = ({ componentIn }: { componentIn: React.ReactElement }) => {
 
 function App() {
   return (
+    <ChakraProvider>
       <Router>
         <Routes>
           <Route path = "Testing" element = {<DebuggingPage />} />
@@ -35,6 +37,7 @@ function App() {
           <Route path={PAGE_NOT_FOUND} element={<ErrorPage />} />
         </Routes>
       </Router>
+    </ChakraProvider>
   );
 };
 
