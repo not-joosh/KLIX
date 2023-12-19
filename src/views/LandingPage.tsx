@@ -1,4 +1,4 @@
-/*===============           DEPENDENCIES            ===============*/
+
 import { AnimatePresence, motion } from "framer-motion";
 import { Login } from "../components/authentication/Login";
 import { useState, useEffect } from "react";
