@@ -80,6 +80,7 @@ const SideBar = ({handleCloseSideBar}: SideBarProps) => {
     const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
     const { toggleNotifcation } = useNotifications();
     const { changeThreshHold } = useThreshHold();
+    const navigate = useNavigate();
 
     const updateThreshHold = async (event: React.ChangeEvent<HTMLDivElement>) => {
         try {
@@ -143,10 +144,10 @@ const SideBar = ({handleCloseSideBar}: SideBarProps) => {
                 </motion.div>
 
 
-                <motion.div style = {{transition: "all 0.1s ease"}}className = "p-3  flex"  whileTap = {{ scale: 0.98}} whileHover={{ scale: 1.03, cursor: "pointer" }}>
+                <motion.div onClick = {() => {navigate(SETTINGS)}} style = {{transition: "all 0.1s ease"}}className = "p-3  flex"  whileTap = {{ scale: 0.98}} whileHover={{ scale: 1.03, cursor: "pointer" }}>
                     {/*@ts-ignore */}
                     <SettingsIcon />
-                    <span className = "px-2 text-s font-sans">SETTINGS</span>
+                    <span className = "px-2 text-s font-sans" >SETTINGS</span>
                 </motion.div>
                 
                 <motion.div style = {{transition: "all 0.1s ease"}}className = "p-3   flex"  whileTap = {{ scale: 0.98}} whileHover={{ scale: 1.03, cursor: "pointer" }}>
@@ -238,6 +239,7 @@ export const ToolTip = () => {
 /*==================== PROFILE SIDEBAR ===========================*/
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 /**INTERFACE */
 interface ProfileSideBarProps {
     handleCloseProfile: () => void;

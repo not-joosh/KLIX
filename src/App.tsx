@@ -35,7 +35,8 @@ function App() {
           <Route path = "Testing" element = {<DebuggingPage />} />
           <Route path={LANDINGPAGE} element={<LandingPage />} />
           <Route path={HOME} element={wrapNav({ componentIn: <HomePage /> })} />
-          <Route path={HOME + SETTINGS} element={wrapNav({ componentIn: <SettingsPage /> })} />
+          <Route path={SETTINGS} element={<SettingsPage />} />
+          {/* <Route path={HOME + SETTINGS} element={wrapNav({ componentIn: <SettingsPage /> })} /> */}
           <Route path={PAGE_NOT_FOUND} element={<ErrorPage />} />
         </Routes>
       </Router>

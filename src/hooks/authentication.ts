@@ -1,5 +1,5 @@
 /*===============           DEPENDENCIES            ===============*/
-import { signInWithPopup, UserCredential, User, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, fetchSignInMethodsForEmail } from "firebase/auth";
+import { signInWithPopup, UserCredential, User, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, googleProvider, githubProvider, usersRef, storage } from "../store/firebase";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,6 @@ import { LANDINGPAGE } from "../store/routes";
 import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { update } from "firebase/database";
 
 
 export const useAuthentication = () => {
@@ -19,22 +18,22 @@ export const useAuthentication = () => {
             setIsLoading(true);
             const result: UserCredential = await signInWithPopup(auth, googleProvider);
             const user: User | null = result.user;
-            /*CHECK TO SEE IF EMAIL EXISTS IN DATA BASE ALREADY*/
-            const signInMethods = await fetchSignInMethodsForEmail(auth, user?.email!);
-            /*EMAIL DOESNT EXIST YET */
-            if (signInMethods.length <= 0) {
+            const googleDocRef = doc(usersRef, auth.currentUser?.uid);
+            const userDocSnapshot = await getDoc(googleDocRef);
+            const userDocExists = userDocSnapshot.exists();
+            if (userDocExists) {
+                console.log('User has signed in before');
+            } else {
+                console.log('User has not signed in with Google before');
                 const userDoc = doc(usersRef, auth.currentUser?.uid);
-                // I also want to save that they used google for signup
-                
                 await setDoc(userDoc, {
                     threshHold: 0,
                     notificationsMethods: {
                         'isSMS': false,
                         'isEmail': false,
-                        'isApp': false,
                     },
                     isNotificationsEnabled: false,
-                    signedInWith: 'google',
+                    signedInWith: 'Google',
                     email: user?.email,
                     id: auth.currentUser?.uid,
                     accountType: 'user',
@@ -48,7 +47,7 @@ export const useAuthentication = () => {
                     const imageLink = await getDownloadURL(uploadedImage.ref);
                     await updateDoc(userDoc, {
                         profileImgUrl: imageLink,
-                        profileImgName: `${userDoc.id}_githubProfilePicture`
+                        profileImgName: `${userDoc.id}_googleProfilePicture`
                     });
                 };
             };
@@ -85,18 +84,22 @@ export const useAuthentication = () => {
             setIsLoading(true);
             const result: UserCredential = await signInWithPopup(auth, githubProvider);
             const user: User | null = result.user;
-            const signInMethods = await fetchSignInMethodsForEmail(auth, user?.email!);
-            if (signInMethods.length <= 0) {
+            const githubUserDocRef = doc(usersRef, auth.currentUser?.uid);
+            const userDocSnapshot = await getDoc(githubUserDocRef);
+            const userDocExists = userDocSnapshot.exists();
+            if (userDocExists) {
+                console.log('User has signed in before');
+            } else {
+                console.log('User has not signed in with GitHub before');
                 const userDoc = doc(usersRef, auth.currentUser?.uid);
                 await setDoc(userDoc, {
                     threshHold: 0,
                     notificationsMethods: {
                         'isSMS': false,
                         'isEmail': false,
-                        'isApp': false,
                     },
                     isNotificationsEnabled: false,
-                    signedInWith: 'google',
+                    signedInWith: 'Github',
                     email: user?.email,
                     id: auth.currentUser?.uid,
                     accountType: 'user',
