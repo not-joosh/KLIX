@@ -105,14 +105,6 @@ export const CloseIcon = (csName: string, props: SVGProps<SVGSVGElement>) => {
 
 export const DefaultProfileIcon = (csName: string, props: SVGProps<SVGSVGElement>) => {
     return (
-        // <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-        // className = {`${csName}`}
-        // {...props}
-        // width="200" height="200" viewBox="0 0 8500.000000 5154.000000"
-        // preserveAspectRatio="xMidYMid meet">
-
-
- 
         <svg
             stroke="white"
             version="1.0"
@@ -191,4 +183,111 @@ export const DefaultProfileIcon = (csName: string, props: SVGProps<SVGSVGElement
         </svg>
     );
 };
-  
+
+export const InfoIcon = (csName: string, props: SVGProps<SVGSVGElement>) => {
+    return (
+        <svg
+            className = {`${csName}`}
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4" />
+            <path d="M12 8h.01" />
+        </svg>
+        );
+};
+
+export const LightbublIcon = (csName: string, props: SVGProps<SVGSVGElement>) => {
+    return (
+        <svg
+            {...props}
+            className = {`${csName}`}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+            <path d="M9 18h6" />
+            <path d="M10 22h4" />
+          </svg>
+    );
+};
+
+export const MailIcon = (csName: string, props: SVGProps<SVGSVGElement>) => {
+    return (
+        <svg
+            {...props}
+            className = {`${csName}`}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+    );
+};
+
+export const PanelTopCloseIcon = (csName: string, props: SVGProps<SVGSVGElement>) => {
+    return (
+        <svg
+            {...props}
+            className = {`${csName}`}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            >
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+            <line x1="3" x2="21" y1="9" y2="9" />
+            <path d="m9 16 3-3 3 3" />
+        </svg>
+    );
+};
+
+export const SettingsIcon = (csName: string, props: SVGProps<SVGSVGElement>) => {
+    return (
+        <svg
+            {...props}
+            className = {`${csName}`}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+    );
+};

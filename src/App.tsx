@@ -5,7 +5,7 @@ import './index.css'
 
 
 /*==========    ROUTES    ==========*/
-import { LANDINGPAGE, HOME, PAGE_NOT_FOUND } from './store/routes';
+import { LANDINGPAGE, HOME, PAGE_NOT_FOUND, SETTINGS } from './store/routes';
 
 /*==========    COMPONENTS    ==========*/
 import { Navbar } from './components/Navbar'; 
@@ -14,6 +14,7 @@ import { Navbar } from './components/Navbar';
 import { LandingPage } from './views/LandingPage';
 import { HomePage } from './views/HomePage';
 import { ErrorPage } from './views/ErrorPage';
+import { SettingsPage } from './views/SettingsPage';
 import { DebuggingPage } from './views/DebuggingPage';
 
 
@@ -34,6 +35,7 @@ function App() {
           <Route path = "Testing" element = {<DebuggingPage />} />
           <Route path={LANDINGPAGE} element={<LandingPage />} />
           <Route path={HOME} element={wrapNav({ componentIn: <HomePage /> })} />
+          <Route path={HOME + SETTINGS} element={wrapNav({ componentIn: <SettingsPage /> })} />
           <Route path={PAGE_NOT_FOUND} element={<ErrorPage />} />
         </Routes>
       </Router>

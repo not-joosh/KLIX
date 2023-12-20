@@ -1,12 +1,14 @@
 /*===============           DEPENDENCIES            ===============*/
 import { signInWithPopup, UserCredential, User, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, fetchSignInMethodsForEmail } from "firebase/auth";
-import { auth, googleProvider, githubProvider, usersRef } from "../store/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, googleProvider, githubProvider, usersRef, storage } from "../store/firebase";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { LANDINGPAGE } from "../store/routes";
 import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { set } from "firebase/database";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { update } from "firebase/database";
+
 
 export const useAuthentication = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -22,11 +24,33 @@ export const useAuthentication = () => {
             /*EMAIL DOESNT EXIST YET */
             if (signInMethods.length <= 0) {
                 const userDoc = doc(usersRef, auth.currentUser?.uid);
+                // I also want to save that they used google for signup
+                
                 await setDoc(userDoc, {
+                    threshHold: 0,
+                    notificationsMethods: {
+                        'isSMS': false,
+                        'isEmail': false,
+                        'isApp': false,
+                    },
+                    isNotificationsEnabled: false,
+                    signedInWith: 'google',
                     email: user?.email,
                     id: auth.currentUser?.uid,
                     accountType: 'user',
                 });
+                // Saving their profile picture into storage
+                const storageRef = ref(storage, `profileIcons/${userDoc.id}`);
+                if (user?.photoURL) {
+                    const response = await fetch(user.photoURL);
+                    const blob = await response.blob();
+                    const uploadedImage = await uploadBytesResumable(storageRef, blob);
+                    const imageLink = await getDownloadURL(uploadedImage.ref);
+                    await updateDoc(userDoc, {
+                        profileImgUrl: imageLink,
+                        profileImgName: `${userDoc.id}_githubProfilePicture`
+                    });
+                };
             };
             const userDocRef = doc(usersRef, auth.currentUser?.uid);
             const snapshot = await getDoc(userDocRef);
@@ -65,10 +89,30 @@ export const useAuthentication = () => {
             if (signInMethods.length <= 0) {
                 const userDoc = doc(usersRef, auth.currentUser?.uid);
                 await setDoc(userDoc, {
+                    threshHold: 0,
+                    notificationsMethods: {
+                        'isSMS': false,
+                        'isEmail': false,
+                        'isApp': false,
+                    },
+                    isNotificationsEnabled: false,
+                    signedInWith: 'google',
                     email: user?.email,
                     id: auth.currentUser?.uid,
                     accountType: 'user',
                 });
+                // Saving their profile picture into storage
+                const storageRef = ref(storage, `profileIcons/${userDoc.id}`);
+                if (user?.photoURL) {
+                    const response = await fetch(user.photoURL);
+                    const blob = await response.blob();
+                    const uploadedImage = await uploadBytesResumable(storageRef, blob);
+                    const imageLink = await getDownloadURL(uploadedImage.ref);
+                    await updateDoc(userDoc, {
+                        profileImgUrl: imageLink,
+                        profileImgName: `${userDoc.id}_githubProfilePicture`
+                    });
+                };
             };
             const userDocRef = doc(usersRef, auth.currentUser?.uid);
             const snapshot = await getDoc(userDocRef);
@@ -137,11 +181,21 @@ export const useAuthentication = () => {
             await signInWithEmailAndPassword(auth, email, password);
             const userDoc = doc(usersRef, auth.currentUser?.uid);
             await setDoc(userDoc, {
-                // ID: auth.currentUser.uid,
+                threshHold: 0,
+                notificationsMethods: {
+                    'isSMS': false,
+                    'isEmail': false,
+                    'isApp': false,
+                    profileImgUrl: '',
+                    profileImgName: '',
+                },
+                isNotificationsEnabled: false,
+                signedInWith: 'google',
                 email: email,
-                id: auth.currentUser?.uid ?? '',
+                id: auth.currentUser?.uid,
                 accountType: 'user',
             });
+
             const userDocRef = doc(usersRef, auth.currentUser?.uid);
             const snapshot = await getDoc(userDocRef);
             const data = snapshot.data() ?? {}; // Add nullish coalescing operator to provide default value

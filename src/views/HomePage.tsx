@@ -20,9 +20,7 @@ export const HomePage = () => {
     return (
         <>
             <TransitionBlob />
-            {/* <HamburgerIcon /> */}
             <div>Home Page</div>
-            <DebuggingPage />
         </>
     );
 };

@@ -1,0 +1,3 @@
+Create me a S&500 Tracker dashboard that showcases the most recently visited S&500 company. Also include a navbar that allows me to pull up a side menu. The navbar should also have a profile picture that is clickable 
+
+
