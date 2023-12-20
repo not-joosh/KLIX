@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CloseIcon, DefaultProfileIcon, HamburgerIcon } from "../assets/icons/icons";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
 
-import { auth, db, usersRef } from "../store/firebase";
-import { query, where, onSnapshot, doc } from "firebase/firestore";
+import { auth, db, storage, usersRef } from "../store/firebase";
+import { query, where, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { useAuthentication } from "../hooks/authentication";
 /*===============            COMPONENT             ================*/
 export const Navbar = () => { 
@@ -67,6 +67,7 @@ import { SettingsIcon, MailIcon, InfoIcon, PanelTopCloseIcon } from "../assets/i
 import { useNotifications } from "../hooks/notifications";
 import { SETTINGS } from "../store/routes";
 import { useThreshHold } from "../hooks/threshold";
+import { set } from "firebase/database";
 /**INTERFACE */
 interface SideBarProps {
     handleCloseSideBar: () => void;
@@ -235,6 +236,8 @@ export const ToolTip = () => {
     );
 };
 /*==================== PROFILE SIDEBAR ===========================*/
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { useToast } from "@chakra-ui/react";
 /**INTERFACE */
 interface ProfileSideBarProps {
     handleCloseProfile: () => void;
@@ -242,96 +245,184 @@ interface ProfileSideBarProps {
 /**COMPONENT */
 const ProfileSideBar = ({ handleCloseProfile }: ProfileSideBarProps) => {
     const sidebarRef = useRef<HTMLDivElement>(null);
+    const [imgName, setIMGName] = useState<string | null>(null);
+    const newImageRef = useRef<HTMLInputElement>(null);
+    const toast = useToast();
+    
     const { logout } = useAuthentication(); 
+    const handleUpdatePFP = async () => {
+        try {
+            if (!newImageRef.current?.files?.[0]) return;
+            const file = newImageRef.current?.files?.[0];
+            const storageRef = ref(storage, 'profileIcons/' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                },
+                (error) => {
+                    console.log(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        setIMGName(file.name);
+                        // Update userDoc
+                        const userID = auth.currentUser?.uid || localStorage.getItem('userID');
+                        if (!userID) return;
+                        const userDocRef = doc(usersRef, userID);
+                        updateDoc(userDocRef, {
+                            profileImgName: file.name,
+                            profileImgUrl: downloadURL,
+                        });
+                        // Delete old image
+                        if (imgName) {
+                            const oldImageRef = ref(storage, 'profileIcons/' + imgName);
+                            deleteObject(oldImageRef)
+                                .then(() => {
+                                    console.log('Old image deleted successfully');
+                                })
+                                .catch((error) => {
+                                    console.log('Error deleting old image:', error);
+                                });
+                        }
+                    });
+                }
+            );
+            toast({
+                title: 'Successfully Updated Profile!',
+                status: 'success',
+                isClosable: true,
+                position: 'top',
+                duration: 3000,
+            });
+        } catch (error: unknown) {
+            if (error instanceof Error)
+                toast({
+                    title: 'Could not Upload Image.',
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top',
+                    description: error.message,
+                    duration: 3000,
+                });
+        } finally {
+            handleCloseProfile();
+        }
+    };
 
     const handleClickOutside: MouseEventHandler<HTMLDivElement> = (event) => {
         if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
             handleCloseProfile();
-        };
+        }
     };
 
     const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
+        if (event.currentTarget.id === 'new-picture-button') {
+            newImageRef.current?.click();
+        }
     };
+
+    useEffect(() => {
+        const userID = auth.currentUser?.uid || localStorage.getItem('userID');
+        if (!userID) return;
+        const unsubscribe = onSnapshot(query(usersRef, where('id', '==', userID)), (snapshot) => {
+            const userData = snapshot.docs[0].data();
+            if (userData.profileImgName) setIMGName(userData.profileImgName);
+        });
+        return () => unsubscribe();
+    }, []);
 
     return (
         <AnimatePresence>
             <motion.div
-                    className="invisible-overlay"
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        zIndex: 5
-                    }}
-                    onClick={handleClickOutside}
-            >
-            </motion.div>
+                className="invisible-overlay"
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    zIndex: 5,
+                }}
+                onClick={handleClickOutside}
+            ></motion.div>
             <motion.div
                 ref={sidebarRef}
                 className="profile-sidebar"
                 style={{
-                    width: "10rem",
-                    backgroundColor: "white",
-                    padding: "1rem",
-                    position: "absolute",
-                    top: "calc(100% - 5rem)",
+                    width: '10rem',
+                    backgroundColor: 'white',
+                    padding: '1rem',
+                    position: 'absolute',
+                    top: 'calc(100% - 5rem)',
                     right: 0,
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
-                    borderRadius: "0.4rem",
-                    transition: "all 0.3s ease-in-out",
-                    zIndex: 6
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+                    borderRadius: '0.4rem',
+                    transition: 'all 0.3s ease-in-out',
+                    zIndex: 6,
                 }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-
             >
                 <motion.button
+                    id="new-picture-button"
                     className="profile-sidebar-button"
                     style={{
-                        color: "black",
-                        marginBottom: "0.5rem",
-                        width: "100%",
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
-                        zIndex: 6
+                        color: 'black',
+                        marginBottom: '0.5rem',
+                        width: '100%',
+                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+                        zIndex: 6,
                     }}
                     onClick={handleButtonClick}
-                    whileHover={{ scale: 1.04, cursor: "pointer"}} whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.04, cursor: 'pointer' }}
+                    whileTap={{ scale: 0.98 }}
                 >
-                    View Profile
+                    + New Picture
                 </motion.button>
                 <motion.button
                     className="profile-sidebar-button"
                     style={{
-                        color: "black",
-                        marginBottom: "0.5rem",
-                        width: "100%",
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
-                        zIndex: 6
+                        color: 'black',
+                        marginBottom: '0.5rem',
+                        width: '100%',
+                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+                        zIndex: 6,
                     }}
                     onClick={handleButtonClick}
-                    whileHover={{ scale: 1.04, cursor: "pointer"}} whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.04, cursor: 'pointer' }}
+                    whileTap={{ scale: 0.98 }}
                 >
                     Dashboard
                 </motion.button>
                 <motion.button
                     className="profile-sidebar-button"
                     style={{
-                        color: "black",
-                        marginBottom: "0.5rem",
-                        width: "100%",
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
-                        zIndex: 6
+                        color: 'black',
+                        marginBottom: '0.5rem',
+                        width: '100%',
+                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+                        zIndex: 6,
                     }}
                     onClick={logout}
-                    whileHover={{ scale: 1.04, cursor: "pointer"}} whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.04, cursor: 'pointer' }}
+                    whileTap={{ scale: 0.98 }}
                 >
                     Logout
                 </motion.button>
+                <input
+                    ref={newImageRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleUpdatePFP}
+                />
             </motion.div>
         </AnimatePresence>
     );
-};
+}
