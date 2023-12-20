@@ -4,16 +4,18 @@ import { Login } from "../components/authentication/Login";
 import { useState } from "react";
 import { LandingPageBG } from "../assets/backdrops/backdrops";
 import { LoadingIcon } from "../components/motion/LoadingIcon";
-
 import { useAuthentication} from "../hooks/authentication";
+import { auth } from "../store/firebase";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { HOME } from "../store/routes";
 
 /*===============            COMPONENT             ================*/
 export const LandingPage = () => {
     const [showModal, setShowModal] = useState(false);
     const { loginWithGoogle, loginWithGithub, loginWithEmailAndPassword, registerWithEmailAndPassword, isLoading } = useAuthentication();
-    const closeModal = () => {
-        setShowModal(false);
-    };
+    const navigate = useNavigate();
+    const closeModal = () => { setShowModal(false)};
     
     const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.target === event.currentTarget) {
@@ -89,7 +91,10 @@ export const LandingPage = () => {
                                 whileHover={{ y: -2 }}
                                 whileTap={{ scale: 0.9 }}
                                 transition={{ duration: 0.1 }}
-                                onClick={() => setShowModal(true)}
+                                onClick={() => {
+                                    if(auth.currentUser?.email) navigate(HOME);
+                                    setShowModal(true);
+                                }}
                                 style={{ zIndex: 1 }}
                             >
                                 Get Started

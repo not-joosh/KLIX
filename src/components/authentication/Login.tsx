@@ -1,7 +1,6 @@
 /*===============           DEPENDENCIES            ===============*/
 import { GoogleIcon, GithubIcon } from "../../assets/icons/icons"
 import { motion } from "framer-motion";
-import { useAuthentication } from '../../hooks/authentication'
 import { HOME } from "../../store/routes";
 
 import * as yup from "yup"; 
@@ -9,12 +8,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form"; 
 import { useState } from "react";
 import { AuthenticationData } from "../../store/types";
-import { LoadingIcon } from "../motion/LoadingIcon";
+
 /*===============           AUTH SCHEMA            ================*/
 
 const AuthenticationSchema = yup.object().shape({
-    email: yup.string().email("Must be a valid email").required("Email is required"),
-    password: yup.string().min(6, "Passwords are at least 6 Characters.").required("Password is required"),
+    email: yup.string().email("*Must be a valid email").required("*Email is required"),
+    password: yup.string().min(6, "*Passwords are at least 6 Characters.").required("*Password is required"),
 });
 
 interface LoginProps {
@@ -71,7 +70,7 @@ export const Login: React.FC<LoginProps> = ({
                 animate="visible"
             >
                 <h2 className="text-3xl font-bold text-center mb-6">TAP IN</h2>
-                <div className="flex flex-col gap-4 mx-8 my-4"> {/* Added mx-4 for horizontal margin */}
+                <div className="flex flex-col gap-4 mx-8 my-4">
                     <motion.button onClick = {async () => loginWithGoogle(HOME)} whileHover={{ y: -2 }} whileTap={{ scale: 0.9 }} className="flex items-center justify-center gap-2 bg-white text-black p-2 rounded-md">
                         {/**@ts-ignore */}
                         <GoogleIcon csName="h-1 w-1" />
@@ -96,7 +95,16 @@ export const Login: React.FC<LoginProps> = ({
                             whileTap={{ scale: 1.04 }}
                             whileHover={{ scale: 1.02 }}
                         />
-                        {isSigningUp && errors.email && <p>{errors.email.message}</p>}
+                        {isSigningUp && errors.email && 
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                style={{ color: "red" }}
+                            >
+                                {errors.email.message}
+                        </motion.p>}
+       
                         <motion.input
                             {...register("password")}
                             className="bg-gray-700 p-3 rounded-md text-white placeholder-gray-400"
@@ -105,7 +113,18 @@ export const Login: React.FC<LoginProps> = ({
                             whileTap={{ scale: 1.04 }}
                             whileHover={{ scale: 1.02 }}
                         />
-                        {isSigningUp && errors.password && <p>{errors.password.message}</p>}
+                        
+                        {/* {isSigningUp && errors.password && <p style = {{color: "red"}}>{errors.password.message}</p>} */}
+                        {isSigningUp && errors.password && 
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            style={{ color: "red" }}
+                        >
+                            {errors.password.message}
+                        </motion.p>}
+                        
                         <div className="flex gap-4">
                             <motion.button onClick = {() => {setIsSigningUp(true)}} whileHover={{ y: -2 }} whileTap={{ scale: 0.9 }} className="flex-1 bg-blue-600 p-3 rounded-md shadow-md hover:shadow-lg hover:bg-blue-700 hover:text-white hover:border-transparent">
                                 SIGNUP

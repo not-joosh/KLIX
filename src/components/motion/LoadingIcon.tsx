@@ -1,7 +1,16 @@
+import STITCH1 from '../../assets/backdrops/STITCH_VIBING0.gif';
+import STITCH2 from '../../assets/backdrops/STITCH_VIBING1.gif';
+import STITCH3 from '../../assets/backdrops/STITCH_ERROR.gif';
+import STITCH4 from '../../assets/backdrops/STITCH_ERROR2.gif';
 export const LoadingIcon = () => {
+    const array = [STITCH1, STITCH2, STITCH3, STITCH4];
+    const random = Math.floor(Math.random() * array.length);
+    const randomGif = array[random];
+    
     return (
         <>
-            <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" style={{margin: 'auto',  backgroundColor: "rgba(26, 30, 35, 0.90)", display: 'block', width: '100vw', height: '100vh', zIndex: 5,
+            <img src={randomGif} alt="Loading..." style={{margin: 'auto', backgroundColor: "transparent", display: 'block', zIndex: "50", position: "fixed", bottom: "0", left: "50%", transform: "translateX(-50%)", width: "150px", height: "150px", opacity: 0.8}}/>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" style={{margin: 'auto', backgroundColor: "rgba(26, 30, 35, 0.90)", display: 'block', width: '100vw', height: '100vh', zIndex: 5,
                 position: "fixed"}} width="202px" height="202px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
                 <defs>
                     <filter id="ldio-9t6szxx2b6-filter" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
