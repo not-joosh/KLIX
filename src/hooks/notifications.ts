@@ -33,9 +33,10 @@ export const useNotifications = () => {
             // Then we will set the the isNotificationsEnabled to true if it is not already
             await updateDoc(userDocRef, {
                 isNotificationsEnabled: !data.isNotificationsEnabled,
+                // need to save the rest of the data
             });
             toast({
-                title: `Successfully ${data.isNotificationsEnabled ? 'Enabled' : 'Disabled'} Notifications!`,
+                title: `Successfully ${data.isNotificationsEnabled ? 'Disabled' : 'Enabled'} Notifications!`,
                 status: 'success',
                 isClosable: true,
                 position: 'top',

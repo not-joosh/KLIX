@@ -1,9 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+
 class SP500_Scraper:
     def __init__(self):
         self.SP500_list = []
-        pass
+
     def scrape(self):
         '''
         Task: We need to scrape the entire list of S&P 500 companies from Wikipedia.
@@ -28,13 +29,14 @@ class SP500_Scraper:
             columns = row.find_all("td")
             symbol = columns[0].text.strip()
             company_name = columns[1].text.strip()
-            cik_number = columns[7].text.strip()
+            cik_number = columns[7].text.strip().split()[0]  # Extract only the numeric part
+            print(f"Symbol: {symbol}, Company Name: {company_name}, CIK: {cik_number}")
             self.SP500_list.append({
                 "Symbol": symbol,
-                "Company Name": company_name,
-                "Assumed Clicks": int(cik_number.replace(',', '')),
-                "Old Clicks": 0,
-                "Current Clicks": 0
+                "Company_Name": company_name,
+                "Assumed_Clicks": cik_number,
+                "Old_Clicks": 0,
+                "Current_Clicks": 0
             })
     
     def get_wiki_stats(self, company_name):
@@ -63,9 +65,9 @@ class SP500_Scraper:
         page_image = soup.find("td", string="Page image").find_next_sibling("td").text.strip()
         page_views = soup.find("td", string="Page views in the past 30 days").find_next_sibling("td").text.strip()
         return {
-            "Number of page watchers": int(page_watchers.replace(',', '')),
-            "Number of page watchers who visited recent edits": int(recent_edit_watchers.replace(',', '')),
-            "Number of redirects to this page": int(redirects.replace(',', '')),
-            "Page image": page_image,
-            "Page views in the past 30 days": int(page_views.replace(',', ''))
+            "Number_of_page watchers": int(page_watchers.replace(',', '')),
+            "Number_of_page watchers who visited recent edits": int(recent_edit_watchers.replace(',', '')),
+            "Number_of_redirects to this page": int(redirects.replace(',', '')),
+            "Page_image": page_image,
+            "Page_views_in_the_past_30_days": int(page_views.replace(',', ''))
         }
