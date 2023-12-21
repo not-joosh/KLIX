@@ -227,7 +227,6 @@ export const SettingsPage = () => {
                                 </motion.div>
                             </CardBody>
                         </Card>
-
                         </motion.div>
                 </section>
             </main>

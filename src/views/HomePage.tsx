@@ -5,6 +5,7 @@ import { TransitionBlob } from "../components/motion/TransitionBlob";
 import { LANDINGPAGE } from "../store/routes";
 import { useNavigate } from "react-router-dom";
 import { HamburgerIcon } from "../assets/icons/icons";
+import { SimpleTable } from "../components/SimpleTable";
 
 /*===============            COMPONENT             ================*/
 export const HomePage = () => {
@@ -20,7 +21,7 @@ export const HomePage = () => {
     return (
         <>
             <TransitionBlob />
-            <div>Home Page</div>
+            <SimpleTable />
         </>
     );
 };

@@ -30,13 +30,16 @@ class SP500_Scraper:
             symbol = columns[0].text.strip()
             company_name = columns[1].text.strip()
             cik_number = columns[7].text.strip().split()[0]  # Extract only the numeric part
-            print(f"Symbol: {symbol}, Company Name: {company_name}, CIK: {cik_number}")
+            security_url = columns[1].find("a")["href"]  # Extract the URL from the company name column
+            redirect_url = columns[0].find("a")["href"]  # Extract the URL from the symbol column
             self.SP500_list.append({
                 "Symbol": symbol,
                 "Company_Name": company_name,
                 "Assumed_Clicks": cik_number,
                 "Old_Clicks": 0,
-                "Current_Clicks": 0
+                "Current_Clicks": 0,
+                "wiki_url": "https://en.wikipedia.org" + security_url,
+                "redirect_url": redirect_url
             })
     
     def get_wiki_stats(self, company_name):
@@ -71,3 +74,34 @@ class SP500_Scraper:
             "Page_image": page_image,
             "Page_views_in_the_past_30_days": int(page_views.replace(',', ''))
         }
+    
+    def test_wiki_stats():
+        scraper = SP500_Scraper()
+        scraper.scrape()
+        company_name = input("Enter a company name from the S&P 500: ")
+        stats = scraper.get_wiki_stats(company_name)
+        print(f"Stats for {company_name}:")
+        print(f"Number of page watchers: {stats['Number_of_page watchers']}")
+        print(f"Number of page watchers who visited recent edits: {stats['Number_of_page watchers who visited recent edits']}")
+        print(f"Number of redirects to this page: {stats['Number_of_redirects to this page']}")
+        print(f"Page image: {stats['Page_image']}")
+        print(f"Page views in the past 30 days: {stats['Page_views_in_the_past_30_days']}")
+        print("Done!")
+
+    def test_scraping(self):
+        print("Testing scraping...")
+        for company in self.SP500_list:
+            print(f"\"Symbol\": {company['Symbol']},")
+            print(f"\"Company_Name\": {company['Company_Name']},")
+            print(f"\"Assumed_Clicks\": {company['Assumed_Clicks']},")
+            print(f"\"Old_Clicks\": {company['Old_Clicks']},")
+            print(f"\"Current_Clicks\": {company['Current_Clicks']},")
+            print(f"\"wiki_url\": \"{company['wiki_url']}\"")
+            print(f"\"redirect_url\": \"{company['redirect_url']}\"")
+            print("})")
+            
+        print("Done!")
+if __name__ == "__main__":
+    scraper = SP500_Scraper()
+    scraper.scrape()
+    scraper.test_scraping()

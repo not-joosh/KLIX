@@ -118,14 +118,14 @@ const SideBar = ({handleCloseSideBar}: SideBarProps) => {
         <AnimatePresence>
             <motion.div
                 onClick={handleCloseSideBar}
-                className="cursor-pointer fixed inset-0 bg-black bg-opacity-70"
+                className="cursor-pointer fixed inset-0 bg-black bg-opacity-70 z-40"
                 initial={{ opacity: 0 }} // Initial opacity set to 0
                 animate={{ opacity: 1 }} // Animate opacity to 1
                 transition={{ duration: 0.3 }} // Set the duration of the fade-in transition
                 style={{ backdropFilter: "blur(0.1em)" }} // Apply a slight blur effect
             ></motion.div>
             <motion.section
-                className="flex-col items-center side-panel-wrapper bg-black text-white p-2"
+                className="flex-col items-center side-panel-wrapper bg-black text-white p-2 z-50"
                 style={{
                     transition: "all 0.1s ease",
                     position: "absolute",
@@ -360,7 +360,7 @@ const ProfileSideBar = ({ handleCloseProfile }: ProfileSideBarProps) => {
                     backgroundColor: 'white',
                     padding: '1rem',
                     position: 'absolute',
-                    top: 'calc(100% - 5rem)',
+                    top: '10%',
                     right: 0,
                     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
                     borderRadius: '0.4rem',

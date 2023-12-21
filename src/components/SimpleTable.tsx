@@ -13,7 +13,7 @@ interface DataItem {
   redirect_url: string;
 };
 
-export const DebuggingPage = () => {
+export const SimpleTable = () => {
   const [data, setData] = useState<DataItem[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [sortOption, setSortOption] = useState('');
