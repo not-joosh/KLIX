@@ -3,6 +3,8 @@ import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ArrowForwardIcon, LinkIcon, ViewIcon } from '@chakra-ui/icons';
+import { auth, db } from '../store/firebase';
+import { onSnapshot, query, where } from 'firebase/firestore';
 interface DataItem {
   Symbol: string;
   Company_Name: string;
@@ -32,8 +34,34 @@ export const SimpleTable = () => {
         console.error(error);
       }
     };
+    const userID = auth.currentUser?.uid || localStorage.getItem("userID") || "";
+    if(!userID) return
+    else {
+      // We will first verify whether or not it has been 24 hours since the user has last
+      // fetched data, this we can get using onSnapshot. Then we can make a function
+      // That will compare the time stamp retrieved. If it has been 24 hours, then we will
+      // make an API call to the backend to fetch the data. If it has not been 24 hours,then we will
+      // go ahead and fetch the data from the database.
+      // We just need to use the userID to find the user's document in the database.
+      // fetchTimeStamp: null,
+      // hasFetchedToday: false,
 
-    fetchData();
+    //   const unsubscribe = onSnapshot(query(db, "users", where("userID", "==", userID)), (snapshot) => {
+    //     snapshot.forEach((doc) => {
+    //       const data = doc.data()
+    //       if
+    //       const fetchTimeStamp = data.fetchTimeStamp
+    //       const hasFetchedToday = data.hasFetchedToday
+    //       const today = new Date()
+    //       const todayTimeStamp = today.getTime()
+    //       if(!hasFetchedToday) {
+
+    //         fetchData()
+
+
+      fetchData();
+    // }
+    }
   }, []);
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -55,19 +83,46 @@ export const SimpleTable = () => {
   return (
     <AnimatePresence>
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">DebuggingPage</h1>
         <div className="max-h-96 overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: isDataLoaded ? 1 : 0, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
           >
-            <div className="mb-4">
-              <label htmlFor="sortOption" className="mr-2">Sort By:</label>
-              <select id="sortOption" value={sortOption} onChange={handleSortChange} className="px-2 py-1 border border-gray-300 rounded-md">
-                <option value="leastAssumedClicks">Least Assumed Clicks</option>
-                <option value="mostAssumedClicks">Most Assumed Clicks</option>
-              </select>
+            <div className="mb-4 items-center justify-center flex">
+              <label htmlFor="sortOption" className="mr-2 font-bold">SORT BY</label>
+            <select
+                id="sortOption"
+                value={sortOption}
+                onChange={handleSortChange}
+                className="cursor-pointer px-2 py-1 border border-gray-300 rounded-md shadow-md"
+                style={{ boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)" }}
+            >
+                <option
+                    value="leastAssumedClicks"
+                    className="cursor-pointer"
+                    style={{
+                        cursor: "pointer",
+                        transition: "color 0.3s",
+                        color: "white",
+                        backgroundColor: "black"
+                    }}
+                >
+                    Least Assumed Clicks
+                </option>
+                <option
+                    value="mostAssumedClicks"
+                    className="cursor-pointer"
+                    style={{
+                        cursor: "pointer",
+                        transition: "color 0.3s",
+                        color: "white",
+                        backgroundColor: "black"
+                    }}
+                >
+                    Most Assumed Clicks
+                </option>
+            </select>
             </div>
             {isDataLoaded && (
               <Table variant="simple">
@@ -115,7 +170,17 @@ export const SimpleTable = () => {
               </Table>
             )}
           </motion.div>
-          {!isDataLoaded && <p>Fetching Data...</p>}
+          {/* BEGIN: ed8c6549bwf9 */}
+          {!isDataLoaded && (
+            <motion.p
+                className="font-bold text-stone-900 text-center justify-center items-center flex"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+            >
+                Fetching Data . . .
+            </motion.p>
+        )}
+        {/* END: ed8c6549bwf9 */}
         </div>
       </div>
     </AnimatePresence>

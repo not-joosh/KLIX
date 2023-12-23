@@ -37,6 +37,8 @@ export const useAuthentication = () => {
                     email: user?.email,
                     id: auth.currentUser?.uid,
                     accountType: 'user',
+                    fetchTimeStamp: null,
+                    hasFetchedToday: false,
                 });
                 // Saving their profile picture into storage
                 const storageRef = ref(storage, `profileIcons/${userDoc.id}`);
@@ -103,6 +105,8 @@ export const useAuthentication = () => {
                     email: user?.email,
                     id: auth.currentUser?.uid,
                     accountType: 'user',
+                    fetchTimeStamp: null,
+                    hasFetchedToday: false,
                 });
                 // Saving their profile picture into storage
                 const storageRef = ref(storage, `profileIcons/${userDoc.id}`);
@@ -191,6 +195,8 @@ export const useAuthentication = () => {
                     'isApp': false,
                     profileImgUrl: '',
                     profileImgName: '',
+                    fetchTimeStamp: null,
+                    hasFetchedToday: false,
                 },
                 isNotificationsEnabled: false,
                 signedInWith: 'google',
