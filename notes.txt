@@ -1,3 +1,54 @@
 Create me a S&500 Tracker dashboard that showcases the most recently visited S&500 company. Also include a navbar that allows me to pull up a side menu. The navbar should also have a profile picture that is clickable 
 
 
+
+What I need to Calculate:
+Average Visits |
+Total Visits   |
+Monthly Visits |
+#######################
+Companies Firebase Collection
+#######################
+CompanyName = "Netflix"
+docId = 2321312323
+DataPoints:
+[
+{Year: 2024, Date(Date): 01/02/24, Last_Updated(Time Stamp): 5:32 PM, Total_Clicks: 23, Monthly_Clicks: 32, Clicks_in_Day: 53, FetchedClicks: 34},
+
+{Year: 2024, Date(Date): 01/03/24, Last_Updated(Time Stamp): 5:32 PM, Total_Clicks: 23, Monthly_Clicks: 32, Clicks_in_Day: 53}
+]
+* Note that 
+Clicks_in_Day = (previous Clicks - Current Clicks)
+Previous Clicks = Clicks on previous day
+Current Clicks = Current Scraped Clicks
+
+If there is no Previous Day, then we will need to just rely on the Monthly_Clicks:
+Procedure if this edge case:
+	- Scrape Monthly Clicks, then set that to Clicks_in_day
+	- If Monthly_Clicks and Clicks_in_day seem different on the next fetch, now we take the difference between the two, and then save that as the Clicks_in_day
+
+
+Main Issue is that we need to fix that there are too many API requests. Let's limit one user to request once a day. 
+
+
+#######################
+User Firebase Collection
+#######################
+
+accountType (string)
+email: (string)
+fetchTimeStamp: (timestamp)
+hasFetchedToday: (boolean)
+
+
+
+
+
+
+
+
+
+
+
+
+

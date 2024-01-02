@@ -28,3 +28,4 @@ export const googleProvider = new GoogleAuthProvider();
 
 /*---   FIREBASE COLLECTIONS    ---*/
 export const usersRef = collection(db, 'users');
+export const dataRef = collection(db, 'data');
